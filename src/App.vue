@@ -29,16 +29,13 @@
                 </div>
             </div>
         </transition>
-        <ul>
-            <button>버튼1</button>
-            <button>버튼2</button>
-            <button>버튼3</button>
-        </ul>
         <div>
-            내용1
+            <b-tabs content-class="mt-3">
+                <b-tab title="1번" active><p>첫번째 탭</p></b-tab>
+                <b-tab title="2번"><p>두번째 탭</p></b-tab>
+                <b-tab title="3번"><p>세번째 탭</p></b-tab>
+            </b-tabs>
         </div>
-        <div>내용2</div>
-        <div>내용3</div>
         <div class="container">
             <div class="row">
                 <div class="col-md-2">
