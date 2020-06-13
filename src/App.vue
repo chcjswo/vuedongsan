@@ -9,6 +9,36 @@
             <p>{{ post.date }} 발행</p>
         </div>
         <button type="button" class="btn btn-dark">Dark</button> -->
+        <transition name="wow">
+            <div v-if="viewModal" class="container my-modal">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img :src="Data[clickIndex].image" alt="" width="70%" />
+                    </div>
+                    <div class="col-md-6">
+                        <h4>{{Data[clickIndex].title}}</h4>
+                        <p>가격: {{Data[clickIndex].price}}</p>
+                        <input
+                                v-on:click="computePrice"
+                                v-model="totalMonth"
+                                type="range"
+                                class="form-control-range" min="0" max="12" >
+                        <p>총 비용: {{totalPrice}}</p>
+                        <button class="btn btn-danger" v-on:click="viewModal=false">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </transition>
+        <ul>
+            <button>버튼1</button>
+            <button>버튼2</button>
+            <button>버튼3</button>
+        </ul>
+        <div>
+            내용1
+        </div>
+        <div>내용2</div>
+        <div>내용3</div>
         <div class="container">
             <div class="row">
                 <div class="col-md-2">
@@ -30,7 +60,8 @@
                         <!-- <div v-for="item in Data" :key="item.id">
                             <Card :data="item" />
                         </div> -->
-                        <Card v-for="(data, i) in Data" :key="i" :data="data"/>
+                        <Card v-for="(data, i) in Data" :key="i" :data="data"
+                                v-on:click.native="showModal(i, $event)"/>
                     </div>
                 </div>
             </div>
@@ -64,6 +95,10 @@
                         date: '2월 22일',
                     },
                 ],
+                viewModal: false,
+                clickIndex: 0,
+                totalMonth: 0,
+                totalPrice: 0
             };
         },
         components: {
@@ -71,7 +106,7 @@
         },
         methods: {
             sortOrigin() {
-                this.Data = Data;
+                this.Data = [...Data];
             },
             sortPrice() {
                 this.Data = this.Data.slice(0).sort((a, b) => a.price - b.price);
@@ -83,6 +118,14 @@
                     return x < y ? -1 : x > y ? 1 : 0;
                 });
             },
+            showModal(index, e) {
+                this.clickIndex = index;
+                this.viewModal = true;
+                e.preventDefault = false;
+            },
+            computePrice() {
+                this.totalPrice = this.totalMonth * this.Data[this.clickIndex].price;
+            }
         },
         watch: {
             Data() {
@@ -99,12 +142,39 @@
 </script>
 
 <style>
+    .my-modal {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: white;
+        padding: 30px;
+        z-index: 10;
+    }
     #app {
         font-family: Avenir, Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 60px;
+    }
+    .wow-enter {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    .wow-enter-to {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+    .wow-enter-active {
+        transition: all 0.5s;
+    }
+    .wow-leave {
+        opacity: 1;
+    }
+    .wow-leave-to {
+        opacity: 0;
+    }
+    .wow-leave-active {
+        transition: all 0.5s;
     }
 </style>
